@@ -89,4 +89,9 @@ class ContractReviewController extends Controller
 
         $result = Gemini::geminiPro()->generateContent('Hello');
     }   
+
+    public function ping(Request $request)
+    {
+        return response()->json(['message' => 'Pong!']);
+    }
 }
