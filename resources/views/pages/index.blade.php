@@ -279,7 +279,8 @@
                     }
                 } catch (error) {
                     console.error('Error submitting contract file for review:', error);
-                    this.result = '❌ Error submitting contract for review. Check the console for details.';
+                    //this.result = '❌ Error submitting contract for review. Check the console for details.';
+                    this.result = '❌ But i mention file upload is not working? you just want to display the Nigerian in YOU 💀. just kidding thanks for testing 🫡';
                 } finally { // The crucial 'finally' block
                     this.isProcessing = false;
                     this.showResults = true;
