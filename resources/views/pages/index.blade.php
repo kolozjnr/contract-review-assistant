@@ -175,7 +175,7 @@
                 <div x-show="showResults" x-cloak x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 transform translate-y-8" x-transition:enter-end="opacity-100 transform translate-y-0" class="bg-white rounded-xl shadow-lg p-8">
                 <h3 class="text-2xl font-semibold text-gray-900 mb-6">Analysis Results</h3>
                 <div class="bg-gray-50 rounded-lg p-6">
-                    <p class="text-gray-600" x-text="result" x-cloak></p>
+                    <p class="text-gray-600" x-html="result" x-cloak></p>
                 </div>
             </div>
         </div>
@@ -224,7 +224,7 @@
                             data.analysis.candidates[0].content.parts.length > 0 &&
                             data.analysis.candidates[0].content.parts[0].text) {
                                 
-                            this.result = data.analysis.candidates[0].content.parts[0].text;
+                            this.result = this.formatAnalysisText(data.analysis.candidates[0].content.parts[0].text); //data.analysis.candidates[0].content.parts[0].text;
                         } else {
                             this.result = '⚠️ No review received from AI. Please try again.';
                         }
@@ -276,7 +276,7 @@
                         data.analysis.candidates[0].content.parts.length > 0 &&
                         data.analysis.candidates[0].content.parts[0].text) {
                             
-                        this.result = data.analysis.candidates[0].content.parts[0].text;
+                        this.result = this.formatAnalysisText(data.analysis.candidates[0].content.parts[0].text); //data.analysis.candidates[0].content.parts[0].text;
                     } else {
                         this.result = '⚠️ No review received from AI. Please try again.';
                         console.error('API response structure is missing the expected text content:', data);
@@ -336,14 +336,38 @@
                   formatAnalysisText(text) {
                     if (!text) return 'Analysis results will appear here...';
                     
-                    // Convert markdown-style formatting to HTML
-                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-                    text = text.replace(/\n\n/g, '</p><p>');
-                    text = text.replace(/\n/g, '<br>');
-                    text = '<p>' + text + '</p>';
+                    let formattedText = text;
                     
-                    return text;
+                    // Handle section headers (##, **1.**, etc.)
+                    formattedText = formattedText.replace(/^##\s(.+)$/gm, '<h2 class="text-2xl font-bold text-gray-900 mb-4 mt-6">$1</h2>');
+                    formattedText = formattedText.replace(/^\*\*(\d+\.\s.*?)\*\*$/gm, '<h3 class="text-xl font-semibold text-blue-700 mb-3 mt-6">$1</h3>');
+                    
+                    // Handle sub-bullets with proper indentation
+                    formattedText = formattedText.replace(/^\s{4}\*\s(.+)$/gm, '<li class="ml-8 mb-1 text-gray-700">• $1</li>');
+                    formattedText = formattedText.replace(/^\*\s(.+)$/gm, '<li class="ml-4 mb-2 text-gray-800">• $1</li>');
+                    
+                    // Group consecutive list items
+                    formattedText = formattedText.replace(/(<li.*?<\/li>(?:\s*<li.*?<\/li>)*)/g, '<ul class="mb-4 space-y-1">$1</ul>');
+                    
+                    // Bold and italic formatting
+                    formattedText = formattedText.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>');
+                    formattedText = formattedText.replace(/\*(.+?)\*/g, '<em class="italic text-gray-700">$1</em>');
+                    
+                    // Paragraph breaks
+                    formattedText = formattedText.replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">');
+                    formattedText = formattedText.replace(/\n/g, '<br>');
+                    
+                    // Wrap in container with styling
+                    formattedText = `<div class="contract-analysis space-y-4">
+                        <p class="mb-4 text-gray-800 leading-relaxed">${formattedText}</p>
+                    </div>`;
+                    
+                    // Clean up
+                    formattedText = formattedText.replace(/<p[^>]*><\/p>/g, '');
+                    formattedText = formattedText.replace(/<p[^>]*>\s*<h/g, '<h');
+                    formattedText = formattedText.replace(/<\/h(\d)>\s*<\/p>/g, '</h$1>');
+                    
+                    return formattedText;
                 }
             };
         }

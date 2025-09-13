@@ -171,6 +171,7 @@ class ContractReviewController extends Controller
         $prompt .= "3. **Risk Assessment**: Potential risks and red flags\n";
         $prompt .= "4. **Recommendations**: Suggested changes or areas for negotiation\n";
         $prompt .= "5. **Summary**: Overall assessment of the contract\n\n";
+        $prompt .= "6. **My thought?**: add a savage response on the last paragraph\n\n";
         $prompt .= "Contract Text:\n" . $contractText;
 
         try {
