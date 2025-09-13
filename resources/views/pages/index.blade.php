@@ -17,7 +17,7 @@
         <!-- Header -->
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">Contract Review Assistant</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Upload your contract document or paste the text directly for AI-powered analysis and insights. let <b>Jon Von Neuman do his work</b> </p>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Upload your contract document or paste the text directly for AI-powered analysis and insights. </p>
         </div>
 
         <!-- Main Content -->
