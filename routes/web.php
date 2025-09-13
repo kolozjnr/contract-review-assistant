@@ -10,8 +10,12 @@ use App\Http\Controllers\ContractReviewController;
 Route::get('/', [ContractReviewController::class, 'index']);
 
 
-Route::post('/review-contract', [ContractReviewController::class, 'review']);
+// Route::post('/review-contract', [ContractReviewController::class, 'review']);
 
-Route::post('/review-contract-file', [ContractReviewController::class, 'reviewFile']);
+// Route::post('/review-contract-file', [ContractReviewController::class, 'reviewFile']);
 
 Route::get('/ping', [ContractReviewController::class, 'ping']);
+
+Route::post('/review-contract-file', [ContractReviewController::class, 'reviewFile']);
+Route::post('/review-contract', [ContractReviewController::class, 'reviewText']);
+Route::post('/contract/file-info', [ContractReviewController::class, 'getFileInfo']);

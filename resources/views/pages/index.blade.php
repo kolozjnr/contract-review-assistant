@@ -217,15 +217,16 @@
 
                         const data = await response.json();
                         console.log(data);
-                        if (data.candidates && data.candidates.length > 0 &&
-                            data.candidates[0].content &&
-                            data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0 &&
-                            data.candidates[0].content.parts[0].text) {
+                        if (data.success && data.analysis && 
+                            data.analysis.candidates && data.analysis.candidates.length > 0 &&
+                            data.analysis.candidates[0].content &&
+                            data.analysis.candidates[0].content.parts && 
+                            data.analysis.candidates[0].content.parts.length > 0 &&
+                            data.analysis.candidates[0].content.parts[0].text) {
                                 
-                            this.result = data.candidates[0].content.parts[0].text;
+                            this.result = data.analysis.candidates[0].content.parts[0].text;
                         } else {
                             this.result = '⚠️ No review received from AI. Please try again.';
-                            console.error('API response structure is missing the expected text content:', data);
                         }
 
                     } catch (error) {
@@ -267,12 +268,14 @@
                     const data = await response.json();
                     console.log(data);
 
-                    if (data.candidates && data.candidates.length > 0 &&
-                        data.candidates[0].content &&
-                        data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0 &&
-                        data.candidates[0].content.parts[0].text) {
+                    if (data.success && data.analysis && 
+                        data.analysis.candidates && data.analysis.candidates.length > 0 &&
+                        data.analysis.candidates[0].content &&
+                        data.analysis.candidates[0].content.parts && 
+                        data.analysis.candidates[0].content.parts.length > 0 &&
+                        data.analysis.candidates[0].content.parts[0].text) {
                             
-                        this.result = data.candidates[0].content.parts[0].text;
+                        this.result = data.analysis.candidates[0].content.parts[0].text;
                     } else {
                         this.result = '⚠️ No review received from AI. Please try again.';
                         console.error('API response structure is missing the expected text content:', data);
@@ -327,6 +330,19 @@
                     const sizes = ['Bytes', 'KB', 'MB'];
                     const i = Math.floor(Math.log(bytes) / Math.log(1024));
                     return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                  formatAnalysisText(text) {
+                    if (!text) return 'Analysis results will appear here...';
+                    
+                    // Convert markdown-style formatting to HTML
+                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                    text = text.replace(/\n\n/g, '</p><p>');
+                    text = text.replace(/\n/g, '<br>');
+                    text = '<p>' + text + '</p>';
+                    
+                    return text;
                 }
             };
         }
