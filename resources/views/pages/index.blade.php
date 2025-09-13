@@ -103,7 +103,7 @@
                     <h2 class="text-2xl font-semibold text-gray-900">Upload Contract File</h2>
                 </div>
                 
-                <form @submit.prevent="submitFile()" class="space-y-6">
+                <form @submit.prevent="submitFile()" class="space-y-6" enctype="multipart/form-data">
                     <!-- Drag and Drop Area -->
                     <div 
                         @drop.prevent="handleDrop($event)"
@@ -238,54 +238,53 @@
                 },
 
                 async submitFile() {
-                    this.isProcessing = true;
-                    this.showResults = false;
-                    this.result = '';
+                this.isProcessing = true;
+                this.showResults = false;
+                this.result = '';
 
-                    if(!this.selectedFile) {
-                        alert('Please select a file to upload.');
-                        return;
+                if (!this.selectedFile) {
+                    alert('Please select a file to upload.');
+                    this.isProcessing = false; // Reset state if no file
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('contractFile', this.selectedFile);
+
+                try {
+                    const response = await fetch('/review-contract-file', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
-                    const formData = new FormData();
-                    formData.append('file', this.selectedFile);
+                    const data = await response.json();
+                    console.log(data);
 
-                    try {
-                        const response = await fetch('/review-contract-file', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            },
-                            body: formData
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-
-                        const data = await response.json();
-                        console.log(data);
-                        if (data.candidates && data.candidates.length > 0 &&
-                            data.candidates[0].content &&
-                            data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0 &&
-                            data.candidates[0].content.parts[0].text) {
-                                
-                            this.result = data.candidates[0].content.parts[0].text;
-                        } else {
-                            this.result = '⚠️ No review received from AI. Please try again.';
-                            console.error('API response structure is missing the expected text content:', data);
-                        }
-                    } catch (error) {
-                        console.error('Error submitting contract for review:', error);
-                        this.result = '❌ Error submitting contract for review. Check the console for details.';
+                    if (data.candidates && data.candidates.length > 0 &&
+                        data.candidates[0].content &&
+                        data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0 &&
+                        data.candidates[0].content.parts[0].text) {
+                            
+                        this.result = data.candidates[0].content.parts[0].text;
+                    } else {
+                        this.result = '⚠️ No review received from AI. Please try again.';
+                        console.error('API response structure is missing the expected text content:', data);
                     }
-
-                    // setTimeout(() => {
-                    //     this.isProcessing = false;
-                    //     this.showResults = true;
-                    //     console.log('Submitting file:', this.selectedFile);
-                    // }, 3000);
-                },
+                } catch (error) {
+                    console.error('Error submitting contract file for review:', error);
+                    this.result = '❌ Error submitting contract for review. Check the console for details.';
+                } finally { // The crucial 'finally' block
+                    this.isProcessing = false;
+                    this.showResults = true;
+                }
+            },
 
                 handleFileSelect(event) {
                     const file = event.target.files[0];
