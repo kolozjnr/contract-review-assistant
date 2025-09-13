@@ -17,7 +17,7 @@
         <!-- Header -->
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">Contract Review Assistant</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Upload your contract document or paste the text directly for AI-powered analysis and insights.</p>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Upload your contract document or paste the text directly for AI-powered analysis and insights. let <b>Jon Von Neuman do his work</b> </p>
         </div>
 
         <!-- Main Content -->
@@ -165,7 +165,7 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Uploading...
+                            Analyzing...
                         </span>
                     </button>
                 </form>
@@ -231,7 +231,8 @@
 
                     } catch (error) {
                         console.error('Error submitting contract for review:', error);
-                        this.result = '❌ Error submitting contract for review. Check the console for details.';
+                        //this.result = '❌ Error submitting contract for review. Check the console for details.';
+                        this.result = '😔 This is definitely my fault, you may want to try again as i am working to fix it.';
                     } finally {
                         this.isProcessing = false;
                         this.showResults = true;
@@ -283,7 +284,7 @@
                 } catch (error) {
                     console.error('Error submitting contract file for review:', error);
                     //this.result = '❌ Error submitting contract for review. Check the console for details.';
-                    this.result = '❌ But i mention file upload is not working? you just want to display the Nigerian in YOU 💀. just kidding thanks for testing 🫡';
+                    this.result = ' 💀 aghhhh sorry this is happening to you Jon Von neuman is working on it 🫡';
                 } finally { // The crucial 'finally' block
                     this.isProcessing = false;
                     this.showResults = true;
