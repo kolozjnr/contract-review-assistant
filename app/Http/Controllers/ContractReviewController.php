@@ -275,4 +275,9 @@ class ContractReviewController extends Controller
         $base = log($size, 1024);
         return round(pow(1024, $base - floor($base)), $precision) . ' ' . $units[floor($base)];
     }
+
+    public function ping()
+    {
+        return response('Pong', 200);
+    }
 }
