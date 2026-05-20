@@ -162,7 +162,7 @@ class ContractReviewController extends Controller
             return response()->json(['error' => 'API key not found.'], 401);
         }
 
-        $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key={$apiKey}";
+        $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={$apiKey}";
 
         // Prepare analysis prompt
         $prompt = "Please analyze this contract document and provide:\n\n";

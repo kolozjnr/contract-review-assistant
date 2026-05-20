@@ -284,7 +284,8 @@
                 } catch (error) {
                     console.error('Error submitting contract file for review:', error);
                     //this.result = '❌ Error submitting contract for review. Check the console for details.';
-                    this.result = ' 💀 aghhhh sorry this is happening to you Jon Von neuman is working on it 🫡';
+                    this.result = 'You are out of Credits. Please try again in 5 minutes.';
+                    // this.result = ' 💀 aghhhh sorry this is happening to you Jon Von neuman is working on it 🫡';
                 } finally { // The crucial 'finally' block
                     this.isProcessing = false;
                     this.showResults = true;
